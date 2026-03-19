@@ -340,8 +340,8 @@ function startHeartAnimation(canvas) {
 
   function buildPointCloud() {
     points.length = 0;
-    const layers = Math.max(12, Math.floor(18 * pointCountScale));
-    const samples = Math.max(120, Math.floor(180 * pointCountScale));
+    const layers = Math.max(10, Math.floor(14 * pointCountScale));
+    const samples = Math.max(90, Math.floor(130 * pointCountScale));
 
     for (let layer = 0; layer < layers; layer += 1) {
       const z = (layer / (layers - 1) - 0.5) * 170;
@@ -356,8 +356,10 @@ function startHeartAnimation(canvas) {
           x: p.x * 19 * scale,
           y: -p.y * 19 * scale,
           z,
-          size: 1.05 + Math.random() * 1.25,
-          alpha: 0.33 + Math.random() * 0.58
+          size: 2 + Math.random() * 2.1,
+          alpha: 0.28 + Math.random() * 0.5,
+          tilt: Math.random() * Math.PI * 2,
+          shade: 195 + Math.floor(Math.random() * 55)
         });
       }
     }
@@ -369,7 +371,7 @@ function startHeartAnimation(canvas) {
     canvas.height = Math.max(1, Math.floor(rect.height));
     const area = canvas.width * canvas.height;
     // Adapt detail to screen size to avoid heavy rendering on weaker devices.
-    pointCountScale = Math.max(0.72, Math.min(1.06, area / 540000));
+    pointCountScale = Math.max(0.74, Math.min(1.08, area / 560000));
     buildPointCloud();
   }
 
@@ -403,8 +405,30 @@ function startHeartAnimation(canvas) {
       y: yr * scale + canvas.height / 2,
       size: point.size * scale,
       alpha: point.alpha * (0.6 + scale * 0.95),
-      depth: z
+      depth: z,
+      tilt: point.tilt + angles.y * 0.6 + angles.z,
+      shade: point.shade
     };
+  }
+
+  function drawPetal(px, py, size, alpha, tilt, shade) {
+    context.save();
+    context.translate(px, py);
+    context.rotate(tilt);
+    context.scale(1.05, 0.92);
+
+    const grad = context.createRadialGradient(-size * 0.25, -size * 0.3, 0.2, 0, 0, size * 1.3);
+    grad.addColorStop(0, `rgba(255, ${shade}, ${shade}, ${Math.min(0.95, alpha + 0.15)})`);
+    grad.addColorStop(1, `rgba(208, 24, 61, ${Math.max(0.12, alpha)})`);
+
+    context.fillStyle = grad;
+    context.beginPath();
+    context.moveTo(0, -size * 1.05);
+    context.bezierCurveTo(size * 0.92, -size * 0.72, size * 1.06, size * 0.78, 0, size * 1.24);
+    context.bezierCurveTo(-size * 1.06, size * 0.78, -size * 0.92, -size * 0.72, 0, -size * 1.05);
+    context.fill();
+
+    context.restore();
   }
 
   let last = 0;
@@ -412,8 +436,8 @@ function startHeartAnimation(canvas) {
   function render(now) {
     requestAnimationFrame(render);
 
-    // Cap heart renderer around ~45 FPS for smoother overall page performance.
-    if (now - lastFrameTime < 22) {
+    // Cap heart renderer around ~42 FPS for smoother overall page performance.
+    if (now - lastFrameTime < 24) {
       return;
     }
     lastFrameTime = now;
@@ -435,15 +459,18 @@ function startHeartAnimation(canvas) {
   rotation.y += (targetY - rotation.y) * 0.06;
   rotation.z += (targetZ - rotation.z) * 0.06;
 
-  const pulse = 1 + Math.sin(t * 2.2) * 0.03;
+    const pulse = 1 + Math.sin(t * 2.2) * 0.034;
 
     for (let i = 0; i < points.length; i += 1) {
       const p = project(points[i], rotation, pulse);
-      context.globalAlpha = Math.min(1, Math.max(0.06, p.alpha));
-      context.fillStyle = "#f48dcb";
-      context.beginPath();
-      context.arc(p.x, p.y, Math.max(0.7, p.size), 0, Math.PI * 2);
-      context.fill();
+      drawPetal(
+        p.x,
+        p.y,
+        Math.max(0.9, p.size),
+        Math.min(1, Math.max(0.08, p.alpha)),
+        p.tilt,
+        p.shade
+      );
     }
 
     context.globalCompositeOperation = "source-over";
