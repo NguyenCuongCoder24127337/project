@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gửi Trái Tim Đến Hân</title>
+  <meta name="description" content="Một trái tim rực rỡ gửi tặng Hân với hiệu ứng particle lãng mạn.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="petalCanvas" aria-hidden="true"></canvas>
+  <audio id="romanticTrack" src="solarflex-romantic-495654.mp3" preload="auto" loop autoplay></audio>
+
+  <main class="page">
+    <section class="hero-card">
+      <h1>Gửi tặng Hân một trái tim thật rực rỡ.</h1>
+      <p id="typingText" class="typing" aria-live="polite"></p>
+
+      <div class="cta-row">
+        <button id="magicBtn" class="magic-btn" type="button">Nhấn để bắt đầu bất ngờ.</button>
+        <span id="pulseText" class="pulse-text">Chỉ cần một nút bấm thôi nhé.</span>
+      </div>
+
+      <section class="gift-stage" aria-label="Hộp quà 3D bất ngờ">
+        <div id="giftBox" class="gift-box" aria-hidden="true">
+          <div class="gift-face gift-front"></div>
+          <div class="gift-face gift-back"></div>
+          <div class="gift-face gift-left"></div>
+          <div class="gift-face gift-right"></div>
+          <div class="gift-face gift-bottom"></div>
+          <div class="gift-lid"></div>
+          <div class="gift-ribbon-v"></div>
+          <div class="gift-ribbon-h"></div>
+        </div>
+      </section>
+
+      <section id="heartStage" class="heart-stage heart-hidden" aria-label="Trái tim dành tặng Hân">
+        <canvas id="heartGiftCanvas" class="heart-canvas"></canvas>
+      </section>
+
+      <section id="finalCard" class="final-card final-card-hidden" aria-label="Thiệp gửi Hân">
+        <article class="card">
+          <h2>Gửi Hân</h2>
+          <p>
+            Một chút dễ thương, một chút lãng mạn, và rất nhiều chân thành được gói vào tấm thiệp này.
+            Mong Hân luôn vui, luôn rực rỡ, và gặp thật nhiều điều đẹp đẽ trong mỗi ngày.
+          </p>
+          <p>
+            Cảm ơn Hân đã là người đặc biệt trong trái tim của mình.
+          </p>
+          <div class="sign">Ký tên: Cường.</div>
+        </article>
+      </section>
+
+      <footer class="card-footer">
+        <p class="card-note">Thiệp ký tên Cường vẫn có sẵn tại trang thiep.html.</p>
+      </footer>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
