@@ -356,10 +356,10 @@ function startHeartAnimation(canvas) {
           x: p.x * 19 * scale,
           y: -p.y * 19 * scale,
           z,
-          size: 2 + Math.random() * 2.1,
-          alpha: 0.28 + Math.random() * 0.5,
+          size: 2.2 + Math.random() * 2.4,
+          alpha: 0.35 + Math.random() * 0.5,
           tilt: Math.random() * Math.PI * 2,
-          shade: 195 + Math.floor(Math.random() * 55)
+          shade: 145 + Math.floor(Math.random() * 45)
         });
       }
     }
@@ -415,17 +415,24 @@ function startHeartAnimation(canvas) {
     context.save();
     context.translate(px, py);
     context.rotate(tilt);
-    context.scale(1.05, 0.92);
+    context.scale(1.12, 0.86);
 
-    const grad = context.createRadialGradient(-size * 0.25, -size * 0.3, 0.2, 0, 0, size * 1.3);
-    grad.addColorStop(0, `rgba(255, ${shade}, ${shade}, ${Math.min(0.95, alpha + 0.15)})`);
-    grad.addColorStop(1, `rgba(208, 24, 61, ${Math.max(0.12, alpha)})`);
+    const grad = context.createRadialGradient(-size * 0.3, -size * 0.38, 0.2, 0, 0, size * 1.45);
+    grad.addColorStop(0, `rgba(255, ${shade}, ${shade - 12}, ${Math.min(1, alpha + 0.2)})`);
+    grad.addColorStop(0.45, `rgba(240, 42, 76, ${Math.min(0.95, alpha + 0.08)})`);
+    grad.addColorStop(1, `rgba(176, 7, 34, ${Math.max(0.18, alpha)})`);
 
     context.fillStyle = grad;
     context.beginPath();
-    context.moveTo(0, -size * 1.05);
-    context.bezierCurveTo(size * 0.92, -size * 0.72, size * 1.06, size * 0.78, 0, size * 1.24);
-    context.bezierCurveTo(-size * 1.06, size * 0.78, -size * 0.92, -size * 0.72, 0, -size * 1.05);
+    context.moveTo(0, -size * 1.18);
+    context.bezierCurveTo(size * 0.96, -size * 0.8, size * 1.18, size * 0.78, 0, size * 1.32);
+    context.bezierCurveTo(-size * 1.18, size * 0.78, -size * 0.96, -size * 0.8, 0, -size * 1.18);
+    context.fill();
+
+    context.globalAlpha = Math.min(1, alpha * 0.42);
+    context.fillStyle = "rgba(255, 212, 220, 0.9)";
+    context.beginPath();
+    context.ellipse(-size * 0.2, -size * 0.42, size * 0.26, size * 0.14, -0.35, 0, Math.PI * 2);
     context.fill();
 
     context.restore();
