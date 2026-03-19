@@ -411,30 +411,39 @@ function startHeartAnimation(canvas) {
     };
   }
 
-  function drawPetal(px, py, size, alpha, tilt, shade) {
+  function drawNeonStroke(px, py, size, alpha, tilt, shade) {
     context.save();
     context.translate(px, py);
     context.rotate(tilt);
-    context.scale(1.12, 0.86);
-
-    const grad = context.createRadialGradient(-size * 0.3, -size * 0.38, 0.2, 0, 0, size * 1.45);
-    grad.addColorStop(0, `rgba(255, ${shade}, ${shade - 12}, ${Math.min(1, alpha + 0.2)})`);
-    grad.addColorStop(0.45, `rgba(240, 42, 76, ${Math.min(0.95, alpha + 0.08)})`);
-    grad.addColorStop(1, `rgba(176, 7, 34, ${Math.max(0.18, alpha)})`);
-
-    context.fillStyle = grad;
+    
+    // Neon glow effect - draw with shadow blur
+    context.lineWidth = Math.max(0.8, size * 0.32);
+    context.strokeStyle = `rgba(255, 20, 147, ${Math.min(1, alpha * 1.2)})`;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    
+    // Add strong glow shadow
+    context.shadowColor = `rgba(255, 20, 147, ${Math.min(0.8, alpha)})`;
+    context.shadowBlur = Math.max(4, size * 0.8);
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+    
+    // Draw concentric heart outline
+    const scale = size * 0.18;
     context.beginPath();
-    context.moveTo(0, -size * 1.18);
-    context.bezierCurveTo(size * 0.96, -size * 0.8, size * 1.18, size * 0.78, 0, size * 1.32);
-    context.bezierCurveTo(-size * 1.18, size * 0.78, -size * 0.96, -size * 0.8, 0, -size * 1.18);
-    context.fill();
-
-    context.globalAlpha = Math.min(1, alpha * 0.42);
-    context.fillStyle = "rgba(255, 212, 220, 0.9)";
+    context.moveTo(0, -scale * 1.18);
+    context.bezierCurveTo(scale * 0.96, -scale * 0.8, scale * 1.18, scale * 0.78, 0, scale * 1.32);
+    context.bezierCurveTo(-scale * 1.18, scale * 0.78, -scale * 0.96, -scale * 0.8, 0, -scale * 1.18);
+    context.stroke();
+    
+    // Add inner glow point
+    context.shadowColor = `rgba(255, 105, 180, 0.6)`;
+    context.shadowBlur = Math.max(8, size * 1.2);
+    context.fillStyle = `rgba(255, 20, 147, ${Math.min(0.6, alpha * 0.8)})`;
     context.beginPath();
-    context.ellipse(-size * 0.2, -size * 0.42, size * 0.26, size * 0.14, -0.35, 0, Math.PI * 2);
+    context.arc(0, 0, Math.max(0.4, size * 0.08), 0, Math.PI * 2);
     context.fill();
-
+    
     context.restore();
   }
 
@@ -470,7 +479,7 @@ function startHeartAnimation(canvas) {
 
     for (let i = 0; i < points.length; i += 1) {
       const p = project(points[i], rotation, pulse);
-      drawPetal(
+      drawNeonStroke(
         p.x,
         p.y,
         Math.max(0.9, p.size),
